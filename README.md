@@ -11,7 +11,7 @@ SIDN IPv6 enable app for Plesk, PowerDNS, etc..
 - PHP SSH2 module
 - PHP shell_exec enabled
 - PHP max_execution_time 300+ seconds
-- CLI access to the Plesk VM (or other control panel)
+- CLI access to the target VM
 - API access to the local PowerDNS setup (or other DNS applications)
 
 
@@ -19,8 +19,8 @@ SIDN IPv6 enable app for Plesk, PowerDNS, etc..
 - Greate a hosting location that passes the minimum requirements as described above.
 - Copy the files of this project to the created location
 - Create a key pair and copy these to the directory 'keys' (keypair should be without password)
-- Fill out the config.php
-- Execute ........
+- copy config.example.php to config.php and fill out the blanks
+- Execute by using start.php
 
 ## Plugins
 Plugins can be created for other systems than a Plesk/PowerDNS combinations. These can be placed in the directories 'plugins/cp' and 'plugins/dns'.
