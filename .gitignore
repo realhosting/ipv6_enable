@@ -1,0 +1,11 @@
+SiteDiffbyIP/
+
+notes
+config.php
+*.test.php
+
+keys/*
+!keys/.gitkeep
+
+tasks/*
+!tasks/.gitkeep
