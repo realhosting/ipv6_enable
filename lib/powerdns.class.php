@@ -431,7 +431,8 @@ final class Powerdns
  			$this->setResult($zone);
  			return true;
  		}
-		if (strpos($this->getError(), 'Could not find domain') !== false) {
+
+		if (strpos($this->getError()['msg'], 'Could not find domain') !== false) {
 			//Not there
 			$this->setDomainFound(false);
 		}
@@ -959,9 +960,6 @@ final class Powerdns
 		if(isset($input['update_soa']) && $input['update_soa'] == true) {
 			$this->updateSerial($input);
 		}
-
-		//TEMPORARY REALHOSTING
-		exec('/usr/bin/pdns_control notify-host '. $input['domain'] .' 188.166.13.182', $exec);
 
  		// Notify
  		$settings = array(

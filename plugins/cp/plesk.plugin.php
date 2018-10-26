@@ -1,4 +1,5 @@
 <?php
+// Check Plesk existance
 $vm->exec('cat /opt/psa/version 2>&1');
 if (strpos($vm->getResult(), 'No such file or directory') === false) {
 	$pleskVersion = $vm->getResult();
@@ -6,7 +7,6 @@ if (strpos($vm->getResult(), 'No such file or directory') === false) {
 	echo 'No Plesk installed on this system';
 	exit;
 }
-
 
 // Plesk rereads ip adddresses
 $vm->exec('plesk bin ipmanage --reread');
@@ -35,7 +35,7 @@ foreach ($pleskIps as $ip) {
 		$vm->exec("plesk bin ipmanage -u {$ip['ip']} -type shared");
 	}
 	// Remove unused ip addresses
-	if (!in_array($ip['ip'], $systemIPs)) {
+	if (!in_array($ip['ip'], $system['iplist'])) {
 		$vm->exec("plesk bin ipmanage -r {$ip['ip']}");
 	}
 }
@@ -58,15 +58,35 @@ if ($vm->exec('plesk bin server_pref -s | grep restart-apache | awk \'{print $2}
 }
 $vm->exec('plesk bin server_pref -u -restart-apache 600');
 
+
+$taskMan = new asyncVmTasks($settings);
 // Add IPv6 address
 foreach ($pleskSubscrIp as $subscription => $ips) {
-	if (!in_array($newIPv6, $ips)) {
-		$ips[] = $newIPv6;
+	if (!in_array($system['ipv6'], $ips)) {
+		$ips[] = $system['ipv6'];
 	}
-	echo "plesk bin subscription -u $subscription -ip " . implode(',', $ips) . "\n";
-#	$vm->exec("plesk bin subscription -u $subscription -ip " . implode(',', $ips));
+	$taskMan->setTask("plesk bin subscription -u $subscription -ip " . implode(',', $ips));
+}
+
+if ($taskMan->runTasks()) {
+	print_r($taskMan->getResult());
 }
 
 // Reset apache restart interval
 $vm->exec("plesk bin server_pref -u -restart-apache $restartApacheValue");
+
+
+// Get all Plesk domains and alias domains
+if ($vm->exec('plesk db "select name from domains" --xml')) {
+	foreach ($vm->getXmlResult()['row'] as $row) {	
+		$domains[] = $row['field'];
+	}
+}
+if ($vm->exec('plesk db "select name from domain_aliases" --xml')) {
+	foreach ($vm->getXmlResult()['row'] as $row) {	
+		$domains[] = $row['field'];
+	}
+}
+$domains = array_unique($domains, SORT_STRING);
+
 

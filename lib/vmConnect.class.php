@@ -11,7 +11,9 @@ class vmConnect
 	// Init class
 	public function __construct ($settings)
 	{
-		$this->settings = $settings;
+		$this->settings = $settings['vm'];
+		$this->settings['pubkey_file'] = $settings['path']['key_dir'] . '/' . $settings['vm']['pubkey_file'];
+		$this->settings['privkey_file'] = $settings['path']['key_dir'] . '/' . $settings['vm']['privkey_file'];
 	}
 	
 	// Close ssh session
@@ -94,7 +96,7 @@ EOC;
 	
 	// Connect to ssh
 	private function connect()
-	{
+	{		
 		if ($this->settings['tunnel_enabled']) {
 			$this->session = ssh2_connect($this->settings['tunnel_host'], $this->settings['tunnel_port']);
 		} else {
@@ -164,11 +166,11 @@ EOC;
 	}
 	
 	// Get command log
-	public function getLog($log)
+	public function getLog($all)
 	{
 		if ($all) {
 			return $this->log;
 		}
-		return end(base64_decode($this->log));
+		return base64_decode(end($this->log));	
 	}
 }
