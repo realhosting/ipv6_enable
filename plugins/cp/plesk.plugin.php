@@ -69,7 +69,7 @@ foreach ($pleskSubscrIp as $subscription => $ips) {
 }
 
 if ($taskMan->runTasks()) {
-	print_r($taskMan->getResult());
+#	print_r($taskMan->getResult());
 }
 
 // Reset apache restart interval

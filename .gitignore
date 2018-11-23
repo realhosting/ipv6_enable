@@ -9,3 +9,6 @@ keys/*
 
 tasks/*
 !tasks/.gitkeep
+
+log/*
+!log/.gitkeep

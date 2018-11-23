@@ -1,7 +1,6 @@
 <?php
 require_once $settings['path']['base'] . '/lib/powerdns.class.php';
-$plugin = new Powerdns($settings['plugin']['powerdns']);
-
+$dnsObj = new Powerdns($settings['plugin']['powerdns']);
 
 foreach ($domains as $domain) {
 	$subZones = explode('.', $domain, substr_count($domain, '.'));
@@ -17,8 +16,8 @@ foreach ($domains as $domain) {
 		$data['domain'] = $zone;
 
 		// if zone exists, get zone data
-		if ($plugin->getZone($data)) {
-			$records = $plugin->getResult()['records'];
+		if ($dnsObj->getZone($data)) {
+			$records = $dnsObj->getResult()['records'];
 			
 			// Look for already existing AAAA records with an IP from this server
 			$nameExcludeList = array();
@@ -45,9 +44,8 @@ foreach ($domains as $domain) {
 			
 			// Add new AAAA records to this zone
 			if (isset($data['records'])) {
-#				$plugin->addRecord($data);
-#				$plugin->notify($data)
-				print_r($data);	
+				$dnsObj->addRecord($data);
+				$dnsObj->notify($data);
 			}
 			
 			break;

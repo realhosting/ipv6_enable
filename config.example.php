@@ -8,6 +8,7 @@ $settings = [
 		'key_dir'		=> $basePath . '/' . 'keys',
 		'task_dir'		=> $basePath . '/' . 'tasks',
 		'plugin_dir'	=> $basePath . '/' . 'plugins',
+		'log_dir'		=> $basePath . '/' . 'log',
 	],
 	// VM connection settings
 	'vm' => [

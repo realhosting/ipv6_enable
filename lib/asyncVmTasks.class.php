@@ -4,25 +4,27 @@
 class asyncVmTasks
 {
 	private $phpBin = '/opt/plesk/php/7.0/bin/php';
-	private $usleep = 500000; // 0.3 sec
+	private $taskDelay = 500000; // 0.5 sec
 	private $tasklog;
 	private $result;
 	private $error;
 	private $tasks;
 	private $vm;
+	private $logFile;
 	
 	// Init
 	public function __construct ($settings)
 	{
 		$this->settings = $settings['path'];
-		
 		$this->tasklog = $this->settings['task_dir'] . '/' . sha1(microtime(true));
+		$this->logFile = $this->settings['log_dir'] . '/' . $settings['vm']['host'] . '.log';
 		$this->vm = new vmConnect($settings);
 	}
 	
 	// Garbage cleanup
 	public function __destruct ()
 	{
+		file_put_contents($this->logFile, file_get_contents($this->tasklog), FILE_APPEND);
 		@unlink($this->tasklog);
 	}
 	
@@ -43,7 +45,7 @@ class asyncVmTasks
 			$this->vm->clearTasks();
 			
 			// spread the load
-			usleep($this->usleep);
+			usleep($this->taskDelay);
 		}
 		
 		while (count($this->tasks['new']) > 0) {
@@ -58,7 +60,7 @@ class asyncVmTasks
 					}
 				}, file($this->tasklog));
 			}
-			usleep($this->usleep);
+			usleep($this->taskDelay);
 		}
 		return true;
 	}
