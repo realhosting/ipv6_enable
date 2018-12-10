@@ -41,7 +41,7 @@ class asyncVmTasks
 			// Create processes
 			$this->vm->setTask($task['task']);
 			$vmObjPacked = base64_encode(serialize($this->vm));
-			shell_exec("nohup {$this->phpBin} {$this->settings['base']}/inc/async_process.php $vmObjPacked $id {$this->tasklog} > /dev/null 2>&1 &");
+			shell_exec("nohup {$this->phpBin} {$this->settings['base']}/inc/vmtask.cli.php $vmObjPacked $id {$this->tasklog} > /dev/null 2>&1 &");
 			$this->vm->clearTasks();
 			
 			// spread the load
