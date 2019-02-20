@@ -12,3 +12,7 @@ tasks/*
 
 log/*
 !log/.gitkeep
+
+cookies/*
+!cookies/.gitkeep
+
