@@ -56,7 +56,7 @@ if ($vm->exec('plesk bin server_pref -s | grep restart-apache | awk \'{print $2}
 } else {
 	$restartApacheValue = 0;
 }
-$vm->exec('plesk bin server_pref -u -restart-apache 600');
+$vm->exec('plesk bin server_pref -u -restart-apache 1800');
 
 
 $taskMan = new asyncVmTasks($settings);
@@ -74,6 +74,9 @@ if ($taskMan->runTasks()) {
 
 // Reset apache restart interval
 $vm->exec("plesk bin server_pref -u -restart-apache $restartApacheValue");
+
+// Reconfigure hosting settings
+$vm->exec("/opt/psa/admin/bin/httpdmng --reconfigure-all");
 
 
 // Get all Plesk domains and alias domains

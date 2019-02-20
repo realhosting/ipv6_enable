@@ -3,8 +3,8 @@
 
 class asyncVmTasks
 {
-	private $phpBin = '/opt/plesk/php/7.0/bin/php';
-	private $taskDelay = 500000; // 0.5 sec
+	private $phpBin = '/usr/bin/php'; // /opt/plesk/php/7.0/bin/php
+	private $taskDelay = 800000; // 0.8 sec
 	private $tasklog;
 	private $result;
 	private $error;
@@ -31,7 +31,7 @@ class asyncVmTasks
 	// Set task
 	public function setTask($task)
 	{
-		$taskId = sha1($vmObjPacked1 . microtime());
+		$taskId = sha1(mt_rand() . microtime());
 		$this->tasks['new'][$taskId]['task'] = $task;
 	}
 	

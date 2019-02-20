@@ -1,5 +1,5 @@
 <?php
-$basePath = $_SERVER['DOCUMENT_ROOT'] . '';
+$basePath = dirname(__FILE__);
 
 $settings = [
 	// Paths
@@ -15,7 +15,7 @@ $settings = [
 		'user'			=> 'root',
 		'pubkey_file'	=> 'pub.key',
 		'privkey_file'	=> 'priv.key',
-		'host'			=> 'host.name',
+		'host'			=> 'host.name', // Server that you are enabling IPv6 on
 		'port'			=> 22,
 		'tunnel_host'	=> 'tunnel.host.name',
 		'tunnel_port'	=> 22,

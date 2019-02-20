@@ -1,4 +1,7 @@
 <?php
+$startTime = microtime(true);
+$timeout = $startTime + ini_get('max_execution_time') - 20;
+
 // Config
 require_once 'config.php';
 
@@ -16,7 +19,7 @@ plesk db "SELECT DISTINCT d.name, GROUP_CONCAT(DISTINCT(IF(ip.public_ip_address 
 EOQ;
 
 if ($vm->exec($subscriptionIpquery)) {
-	foreach ($vm->getXmlResult()['row'] as $row) {	
+	foreach ($vm->getXmlResult()['row'] as $row) {
 		$pleskSubscrIp[$row['field'][0]] = explode(', ', $row['field'][1]);
 	}
 }
@@ -26,15 +29,20 @@ $tmpfile = "{$settings['path']['task_dir']}/compare.tmp";
 // Calculate difference
 foreach ($pleskSubscrIp as $domain => $ip) {
 	shell_exec("nohup php {$settings['path']['base']}/inc/ipdiff.cli.php $domain {$ip[0]} {$ip[1]} $tmpfile > /dev/null 2>&1 &");
-	sleep(1);
+	usleep(1200000);
 }
 
 do {
-	sleep(10);
+	if (microtime(true) > $timeout) {
+		break;
+	} else {
+		sleep(10);
+	}
 	$result = explode("\n", trim(file_get_contents($tmpfile)));
 	
 } while (count($result) < count($pleskSubscrIp));
 
+echo "<h3>Hostname:	{$settings['vm']['host']}</h3>";
 
 foreach ($result as $row) {
 	list($domain, $percentage) = explode(':', $row);
@@ -44,7 +52,7 @@ foreach ($result as $row) {
 		$color = 'red';
 	} else if ($percentage > 99) {
 		$color = 'green';
-	} else
+	} else {
 		$color = 'orange';
 	}
 	echo "$domain: <b style=\"color:$color\">$percentage%</b><br>\n";
