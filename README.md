@@ -41,4 +41,3 @@ $domains = Array
 ## Usage
 - Start the script from the commandline as ./start.php or php start.php. In the first case, make start.php executable (chmod +x start.php)
 - The ipChecker.php script is not commandline ready and must be executed in the browser.
-- 
