@@ -1,5 +1,12 @@
 # ipv6_enable
-SIDN IPv6 enable app for Plesk, PowerDNS, etc..
+**SIDN IPv6 enable app for Plesk, PowerDNS, etc..**
+
+*The scripts checks if the basic DNS records for the VM are correct before you begin to setup.
+After confirmation the script configures the Plesk IP setup, making the new IPv6 a shared IP before adding that IP to the existing domains.
+When the IPv6 is setup, the script passes the domain list to the DNS plugin which adds the correct DNS records to the DNS server.
+The DNS plugin looks for existing A records and adds a AAAA record where it is needed.
+Also subdomains are checked and records added to it if needed.*
+
 
 ## Requirements
 ### Target server
